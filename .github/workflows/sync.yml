@@ -1,17 +1,18 @@
 name: Sync Dify Images
 on:
-  workflow_dispatch: # 支持手动点击运行
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Pull and Save Images
+      - name: Pull Images
         run: |
-          # 拉取 Dify 核心镜像
           docker pull langgenius/dify-api:1.12.0
           docker pull langgenius/dify-web:1.12.0
-          # 打包成 tar 文件
+          
+      - name: Save to Tar
+        run: |
           docker save langgenius/dify-api:1.12.0 langgenius/dify-web:1.12.0 -o dify_bundle.tar
           
       - name: Upload Artifact
@@ -19,4 +20,3 @@ jobs:
         with:
           name: dify-images-tar
           path: dify_bundle.tar
-          retention-days: 1 # 文件保留1天，下完即毁，节省空间
