@@ -1,6 +1,6 @@
 name: Sync Dify Images
 on:
-  workflow_dispatch: # 允许手动启动
+  workflow_dispatch:
 
 jobs:
   build:
@@ -8,11 +8,12 @@ jobs:
     steps:
       - name: Pull and Save
         run: |
-          # 拉取镜像
-          docker pull langgenius/dify-api:1.12.0
-          docker pull langgenius/dify-web:1.12.0
-          # 归档打包
-          docker save langgenius/dify-api:1.12.0 langgenius/dify-web:1.12.0 -o dify_bundle.tar
+          # 使用 latest 确保一定能拉取到镜像
+          docker pull langgenius/dify-api:latest
+          docker pull langgenius/dify-web:latest
+          
+          # 打包
+          docker save langgenius/dify-api:latest langgenius/dify-web:latest -o dify_bundle.tar
           
       - name: Upload
         uses: actions/upload-artifact@v4
